@@ -1,21 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DTF Gang Sheet Builder</title>
-    <style>
-        canvas {
-            border: 1px solid black;
-            cursor: move; /* Indicate that the canvas is draggable */
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas Builder</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <input type="file" id="upload" multiple />
-    <canvas id="canvas"></canvas>
-    <script src="gangsheetscript.js"></script> <!-- Make sure to link your JavaScript file here -->
+  <!-- Welcome Screen for Canvas Setup -->
+  <div id="welcome-screen">
+    <h1>Welcome to the Canvas Builder</h1>
+    <form id="canvas-setup-form">
+      <label for="canvas-width">Canvas Width:</label>
+      <input type="number" id="canvas-width" name="canvas-width" min="100" max="2000" required>
+      
+      <label for="canvas-height">Canvas Height:</label>
+      <input type="number" id="canvas-height" name="canvas-height" min="100" max="2000" required>
+      
+      <button type="submit">Create Canvas</button>
+    </form>
+  </div>
+
+  <!-- Canvas Area -->
+  <div id="canvas-container" style="display:none;">
+    <canvas id="custom-canvas"></canvas>
+    <div>
+      <input type="file" id="upload-image" accept="image/*">
+      <button id="download-btn">Download</button>
+    </div>
+  </div>
+
+  <script src="gangsheetscript.js"></script>
 </body>
 </html>
-
-
+r
