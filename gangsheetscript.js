@@ -1,98 +1,126 @@
-// Variables to store canvas and context
-let canvas, ctx;
-let img = null; // Store the uploaded image
-let isDragging = false;
-let imgX = 0, imgY = 0, imgWidth = 100, imgHeight = 100; // Initial image position and size
-
-// Function to create canvas based on user input dimensions
-document.getElementById('canvas-setup-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  // Get canvas width and height from user input
-  const width = document.getElementById('canvas-width').value;
-  const height = document.getElementById('canvas-height').value;
-
-  // Show the canvas container and hide the welcome screen
-  document.getElementById('canvas-container').style.display = 'flex';
-  document.getElementById('welcome-screen').style.display = 'none';
-
-  // Set up the canvas
-  canvas = document.getElementById('custom-canvas');
-  canvas.width = width;
-  canvas.height = height;
-  ctx = canvas.getContext('2d');
-
-  // Keep canvas centered
-  canvas.style.margin = 'auto';
-});
-
-// Function to handle image upload
-document.getElementById('upload-image').addEventListener('change', function (event) {
-  const file = event.target.files[0];
-  const reader = new FileReader();
-
-  reader.onload = function (e) {
-    img = new Image();
-    img.onload = function () {
-      imgWidth = img.width;
-      imgHeight = img.height;
-      drawCanvas();
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-});
-
-// Draw function to render the canvas and image
-function drawCanvas() {
-  if (ctx) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (img) {
-      ctx.drawImage(img, imgX, imgY, imgWidth, imgHeight);
-    }
+// Event listener for resizing the canvas length
+document.getElementById('resizeCanvasButton').addEventListener('click', function() {
+  const newLengthInches = parseFloat(document.getElementById('resizeCanvasInput').value);
+  
+  if (newLengthInches >= 12) { // Ensure minimum length is 12 inches
+      const newLengthPixels = newLengthInches * dpi; // Convert to pixels
+      
+      // Set new canvas height
+      canvas.setHeight(newLengthPixels);
+      
+      // Center the canvas in its container
+      const canvasContainer = document.querySelector('.canvas-container');
+      canvasContainer.style.margin = 'auto'; // Centering logic
+      
+      // Refresh the canvas
+      canvas.renderAll();
+      
+      // Optionally clear the input field after resizing
+      document.getElementById('resizeCanvasInput').value = '';
+  } else {
+      alert("Please enter a length of at least 12 inches.");
   }
+});
+
+// Initialize Fabric Canvas
+const canvas = new fabric.Canvas('custom-canvas');
+const dpi = 300; // Define DPI for conversion
+
+// Function to add an image to the canvas
+function addImageToCanvas(imageURL) {
+    fabric.Image.fromURL(imageURL, function(img) {
+        img.set({
+            left: 100,
+            top: 100,
+            scaleX: 0.5,
+            scaleY: 0.5,
+            selectable: true // allows dragging and resizing
+        });
+        canvas.add(img);
+    });
 }
 
-// Handle dragging of the image
-canvas.addEventListener('mousedown', function (e) {
-  const mouseX = e.offsetX;
-  const mouseY = e.offsetY;
+// Function to initialize the canvas
+function initializeCanvas() {
+    const canvasLengthInches = parseFloat(document.getElementById('canvasLengthInput').value); // Get length from input
+    const canvasLengthPixels = canvasLengthInches * dpi; // Assuming DPI is 300
 
-  // Check if mouse is inside the image bounds
-  if (mouseX >= imgX && mouseX <= imgX + imgWidth && mouseY >= imgY && mouseY <= imgY + imgHeight) {
-    isDragging = true;
-  }
+    // Set canvas dimensions
+    canvas.setWidth(12 * dpi); // Fixed width of 12 inches in pixels
+    canvas.setHeight(canvasLengthPixels); // Set height based on user input
+}
+
+// Event listener for the canvas size form
+document.getElementById('canvasSizeForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form submission
+    initializeCanvas(); // Initialize canvas with new dimensions
 });
 
-canvas.addEventListener('mousemove', function (e) {
-  if (isDragging) {
-    imgX = e.offsetX - imgWidth / 2;
-    imgY = e.offsetY - imgHeight / 2;
-    drawCanvas();
-  }
+// Handle image upload
+document.getElementById('upload-image').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        addImageToCanvas(e.target.result);
+    };
+    
+    if (file) {
+        reader.readAsDataURL(file);
+    }
 });
 
-canvas.addEventListener('mouseup', function () {
-  isDragging = false;
+// Resize image with mouse wheel when an object is selected
+canvas.on('mouse:wheel', function (opt) {
+    const delta = opt.e.deltaY;
+    const activeObject = canvas.getActiveObject();
+    
+    if (activeObject) {
+        if (delta < 0) {
+            activeObject.scaleX *= 1.1; // Increase scale
+            activeObject.scaleY *= 1.1;
+        } else {
+            activeObject.scaleX *= 0.9; // Decrease scale
+            activeObject.scaleY *= 0.9;
+        }
+        activeObject.setCoords(); // Update coordinates after scaling
+        canvas.renderAll(); // Re-render canvas
+    }
+    
+    opt.e.preventDefault();
+    opt.e.stopPropagation();
 });
 
-// Resize image with mouse wheel
-canvas.addEventListener('wheel', function (e) {
-  e.preventDefault();
-  if (e.deltaY < 0) {
-    imgWidth += 10;
-    imgHeight += 10;
-  } else {
-    imgWidth -= 10;
-    imgHeight -= 10;
-  }
-  drawCanvas();
+// Enable Image Resizing via Dialog Box
+canvas.on('mouse:down', function(e) {
+    if (e.target && e.target.type === 'image') {
+        let img = e.target;
+        
+        let newWidth = prompt("Enter new width (in inches):");
+        let newHeight = prompt("Enter new height (in inches):");
+
+        if (newWidth && newHeight) {
+            let widthPixels = newWidth * dpi;
+            let heightPixels = newHeight * dpi;
+
+            img.set({
+                scaleX: widthPixels / img.width,
+                scaleY: heightPixels / img.height
+            });
+
+            canvas.renderAll(); // Refresh the canvas
+        }
+    }
 });
 
 // Download canvas as an image
-document.getElementById('download-btn').addEventListener('click', function () {
-  const link = document.createElement('a');
-  link.download = 'canvas_image.png';
-  link.href = canvas.toDataURL();
-  link.click();
+document.getElementById('downloadButton').addEventListener('click', function() {
+  const dataURL = canvas.toDataURL({
+      format: 'png',
+      multiplier: 1 // You can change this for higher quality
+  });
+  const a = document.createElement('a');
+  a.href = dataURL;
+  a.download = 'gang_sheet.png'; // Set the default file name
+  a.click(); // Programmatically click the anchor to trigger download
 });

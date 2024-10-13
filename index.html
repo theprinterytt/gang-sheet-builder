@@ -10,27 +10,34 @@
   <!-- Welcome Screen for Canvas Setup -->
   <div id="welcome-screen">
     <h1>Welcome to the Canvas Builder</h1>
-    <form id="canvas-setup-form">
-      <label for="canvas-width">Canvas Width:</label>
-      <input type="number" id="canvas-width" name="canvas-width" min="100" max="2000" required>
+    <form id="canvasSizeForm" class="control-panel">
+      <label for="canvas-width">Canvas Width (fixed at 12 inches):</label>
+      <input type="number" id="canvas-width" name="canvas-width" value="12" readonly required placeholder="Canvas width is fixed at 12 inches">
       
-      <label for="canvas-height">Canvas Height:</label>
-      <input type="number" id="canvas-height" name="canvas-height" min="100" max="2000" required>
+      <label for="canvas-length">Canvas Length (in inches):</label>
+      <input type="number" id="canvasLengthInput" name="canvas-length" min="12" required placeholder="Enter canvas length (minimum 12 inches)">
       
-      <button type="submit">Create Canvas</button>
+      <button class="btn" type="submit">Set Canvas Size</button>
     </form>
+    
+    <!-- New Control Panel for Resizing Canvas Length -->
+    <div class="control-panel">
+      <input type="number" id="resizeCanvasInput" placeholder="New length (in inches)" />
+      <button class="btn" id="resizeCanvasButton">Resize Canvas</button>
+    </div>
   </div>
 
   <!-- Canvas Area -->
   <div id="canvas-container" style="display:none;">
-    <canvas id="custom-canvas"></canvas>
-    <div>
+    <div class="canvas-container">
+      <canvas id="custom-canvas"></canvas>
+    </div>
+    <div class="control-panel">
       <input type="file" id="upload-image" accept="image/*">
-      <button id="download-btn">Download</button>
+      <button class="btn" id="downloadButton">Download</button>
     </div>
   </div>
 
   <script src="gangsheetscript.js"></script>
 </body>
 </html>
-r

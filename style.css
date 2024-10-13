@@ -1,45 +1,66 @@
-/* Center the canvas and style */
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f7f7f7;
+  padding: 20px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.canvas-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: Arial, sans-serif;
-  }
-  
-  #canvas-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  canvas {
-    border: 2px solid black;
-    margin: 20px 0;
-  }
-  
-  /* Styling for the welcome screen */
-  #welcome-screen {
-    text-align: center;
-  }
-  
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  input[type="number"], button {
-    padding: 10px;
-    font-size: 16px;
-    width: 200px;
-    margin: 0 auto;
-  }
-  
-  button {
-    cursor: pointer;
-  }
-  
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    height: calc(100vh - 100px); /* Center within the view */
+    margin-bottom: 20px;     /* Space below the canvas */
+    border: 2px solid #333;   /* Optional border for visibility */
+    background: white;        /* Canvas background color */
+}
+
+#custom-canvas { /* Updated ID to match your HTML */
+  border: 2px solid #333; /* Style for the canvas */
+}
+
+.control-panel {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%; /* Ensure the panel stretches */
+}
+
+input[type="number"], /* Style for number inputs */
+input[type="file"] {
+  padding: 10px;
+  border-radius: 5px; /* Rounded corners */
+  border: 1px solid #ccc; /* Light border for inputs */
+}
+
+.btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px; /* Rounded corners */
+}
+
+.btn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .control-panel {
+        flex-direction: column; /* Stack controls vertically on small screens */
+        align-items: stretch; /* Stretch controls to full width */
+    }
+
+    .btn {
+        width: 100%; /* Full-width buttons */
+        margin-bottom: 10px; /* Space between buttons */
+    }
+}
+}
 
