@@ -3,43 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DTF Gang Sheet Creator</title>
-    <link rel="stylesheet" href="style.css">
+    <title>DTF Gang Sheet Builder</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            cursor: move; /* Indicate that the canvas is draggable */
+        }
+    </style>
 </head>
 <body>
-    <h1>DTF Gang Sheet Creator (12-inch Width, 300 DPI)</h1>
-
-    <!-- Upload Section -->
-    <div id="upload-area">
-        <label for="image-upload">Upload Images:</label>
-        <input type="file" id="image-upload" accept="image/*" multiple>
-    </div>
-
-    <!-- Image Resize Section -->
-    <div id="resize-area">
-        <label for="resize-width">Set Width (inches):</label>
-        <input type="number" id="resize-width" step="0.01" placeholder="Width">
-        <label for="resize-height">Set Height (inches):</label>
-        <input type="number" id="resize-height" step="0.01" placeholder="Height">
-        <button id="apply-resize">Resize Image</button>
-    </div>
-
-    <!-- Canvas for arranging images -->
-    <div id="canvas-area">
-        <canvas id="gang-sheet-canvas"></canvas>
-    </div>
-
-    <!-- Length Adjuster -->
-    <div id="length-area">
-        <label for="canvas-length">Set Canvas Length (inches):</label>
-        <input type="number" id="canvas-length" step="0.01" placeholder="Length">
-        <button id="adjust-length">Adjust Canvas Length</button>
-    </div>
-
-    <!-- Download Button -->
-    <button id="download-btn">Download Gang Sheet</button>
-
-    <script src="app.js"></script>
+    <input type="file" id="upload" multiple />
+    <canvas id="canvas"></canvas>
+    <script src="gangsheetscript.js"></script> <!-- Make sure to link your JavaScript file here -->
 </body>
 </html>
+
 
